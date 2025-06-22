@@ -1,15 +1,17 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from transformers import pipeline
+from fastapi.responses import JSONResponse
+from mangum import Mangum
 
 app = FastAPI()
 
-# Load the lightweight model
+# Load the lightweight model once
 generator = pipeline('text-generation', model='distilgpt2')
 
 class ProductDescriptionRequest(BaseModel):
     prompt: str
-    max_length: int = 450  # Keep max_length small for resource limits
+    max_length: int = 450
 
 @app.post("/generate")
 async def generate_description(request: ProductDescriptionRequest):
@@ -19,4 +21,6 @@ async def generate_description(request: ProductDescriptionRequest):
         return {"description": generated_text}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+
+# Required for Vercel
+handler = Mangum(app)

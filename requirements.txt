@@ -1,4 +1,5 @@
 fastapi
-uvicorn[standard]
+mangum
 transformers
-torch
+torch      # or tensorflow depending on the model
+uvicorn    # optional for local testing

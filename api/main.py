@@ -19,3 +19,4 @@ async def generate_description(request: ProductDescriptionRequest):
         return {"description": generated_text}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
